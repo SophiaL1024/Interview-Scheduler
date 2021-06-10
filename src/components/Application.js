@@ -3,82 +3,43 @@ import axios from 'axios';
 import "components/Application.scss";
 import DayList from "components/DayList"
 import Appointment from "./Appointment"
+import { getAppointmentsForDay } from "helpers/selectors";
 
-const appointments = [
-  {
-    id: 1,
-    time: "12pm",
-  },
-  {
-    id: 2,
-    time: "1pm",
-    interview: {
-      student: "Lydia Miller-Jones",
-      interviewer: {
-        id: 1,
-        name: "Sylvia Palmer",
-        avatar: "https://i.imgur.com/LpaY82x.png",
-      }
-    }
-  },
-  {
-    id: 3,
-    time: "2pm",
-    interview: {
-      student: "Alice",
-      interviewer: {
-        id: 2,
-        name: "Tori Malcolm",
-        avatar: "https://i.imgur.com/Nmx0Qxo.png"
-      }
-    }
-  },
-  {
-    id: 4,
-    time: "3pm",
-    interview: {
-      student: "Bob",
-      interviewer: {
-        id: 3,
-        name: "Mildred Nazir",
-        avatar: "https://i.imgur.com/T2WwVfS.png"
-      }
-    }
-  },
-  {
-    id: 5,
-    time: "4pm",
-    interview: {
-      student: "Sophia",
-      interviewer: {
-        id: 4,
-        name: "Cohana Roy",
-        avatar: "https://i.imgur.com/FK8V841.jpg"
-      }
-    }
-  }
-];
-export default function Application(props) {
+
+export default function Application() {
 
   //combin states in an object
   const [state, setState] = useState({
-    day: "Monday",
+    day: "",
     days: [],
-    appointments: {}
+    appointments:{}
   });
 
-  //define functions to set day and set days
+  
+  //define a function to set day 
   const setDay = day => setState({ ...state, day });
   
   useEffect(() => {
-
+    
+    //define functions to set days and set appointments 
     const setDays = days => setState(prev => ({ ...prev, days }));;
-
-    axios.get("http://localhost:8001/api/days")
-      .then((res) => {
-        setDays(res.data);
-      })
+    const setAppointments = appointments=> setState(prev => ({ ...prev, appointments }));;
+    
+    Promise.all([
+      axios.get("http://localhost:8001/api/days"),
+      axios.get(" http://localhost:8001/api/appointments"),
+      
+    ])
+    .then((all) => {
+      setDays(all[0].data);
+      setAppointments(all[1].data);
+    })
+    
+    
   }, []);
+  
+  const dailyAppointments = getAppointmentsForDay(state,state.day);
+  // const dailyAppointments=[];
 
   return (
     <main className="layout">
@@ -99,7 +60,7 @@ export default function Application(props) {
         />
       </section>
       <section className="schedule">
-        {appointments.map((appointment) => {
+        {dailyAppointments.map((appointment) => {
           return <Appointment key={appointment.id} {...appointment} />
         })}
         <Appointment key="last" time="5pm" />
