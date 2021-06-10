@@ -6,6 +6,7 @@ import Appointment from "./Appointment"
 import { getAppointmentsForDay,getInterview } from "helpers/selectors";
 
 
+
 export default function Application() {
 
   //combin states in an object
