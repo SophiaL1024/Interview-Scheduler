@@ -5,7 +5,7 @@ const getAppointmentsForDay = function(state, day) {
 
   state.days.forEach(dayObj => {
     if (dayObj.name === day) {
-      
+
       dayObj.appointments.forEach((appointment) => {
         result.push(state.appointments[appointment])
       })
@@ -16,6 +16,7 @@ const getAppointmentsForDay = function(state, day) {
 };
 
 const getInterview = function(state, interview) {
+
   if (!interview) {
     return null;
   }
@@ -28,17 +29,18 @@ const getInterview = function(state, interview) {
 };
 
 const getInterviewersForDay = function(state, day) {
-  const specificDay = state.days.filter((element) => day === element.name);
-
 
   const result = [];
-  specificDay.forEach(element => {
-    element.appointments.forEach((e) => {
-      result.push(state.appointments[e]);
 
-    })
-  });
+  state.days.forEach(dayObj => {
+    if (dayObj.name === day) {   
+         
+      dayObj.interviewers.forEach((interviewer) => {
+        result.push(state.interviewers[interviewer])
+      })
+    }
+  })
   return result;
 }
 
-export { getAppointmentsForDay, getInterview }
+export { getAppointmentsForDay, getInterview, getInterviewersForDay }
