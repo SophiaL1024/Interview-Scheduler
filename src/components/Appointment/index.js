@@ -14,6 +14,16 @@ const Appointment = (props) => {
     props.interview ? SHOW : EMPTY
   );
 
+
+  //save an interview 
+  const save = function(name, interviewer) {
+    const interview = {
+      student: name,
+      interviewer
+    };  
+    props.bookInterview(props.id,interview)
+  }
+
   return <article className="appointment">
     <Header time={props.time} />
 
@@ -24,7 +34,7 @@ const Appointment = (props) => {
         interviewer={props.interview.interviewer}
       />
     )}
-    {mode=== CREATE && <Form interviewers={props.interviewers} onCancel={()=>transition(EMPTY)}/>}
+    {mode=== CREATE && <Form interviewers={props.interviewers} save={save} onCancel={()=>transition(EMPTY)}/>}
 
   </article>;
 }
