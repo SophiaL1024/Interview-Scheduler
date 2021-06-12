@@ -43,11 +43,36 @@ export default function Application() {
   }, []);
 
 
-
+  //appointments displayed in the Appointment component
   const appointments = getAppointmentsForDay(state, state.day);
 
   //interviewers displayed in the form
   const interviewers = getInterviewersForDay(state, state.day)
+
+
+  const bookInterview = function(id, interview) {
+
+    //copy appointment by id and update interview
+    const appointment = {
+      ...state.appointments[id],
+      interview: { ...interview }
+    };
+  
+    //copy appointments from states and update the appointment
+    const appointments = {
+      ...state.appointments,
+      [id]: appointment
+    };
+    
+    setState({ ...state, appointments })
+    //update in the API databsae
+    axios.put(`http://localhost:8001/api/appointments/${id} `, {      
+        "interview": interview      
+    })
+      //set state value with the new appointment object
+      // .then(response =>setState({ ...state, appointments }));
+
+  }
 
   const schedule = appointments.map((appointment) => {
     const interview = getInterview(state, appointment.interview);
@@ -57,15 +82,11 @@ export default function Application() {
         id={appointment.id}
         time={appointment.time}
         interview={interview}
+        interviewers={interviewers}
+        bookInterview={bookInterview}
       />
     );
   });
-
-  const bookInterview = function(id, interview) {
-    console.log(id, interview);
-  }
-
-
 
   return (
     <main className="layout">
@@ -86,9 +107,7 @@ export default function Application() {
         />
       </section>
       <section className="schedule">
-        {appointments.map((appointment) => {
-          return <Appointment key={appointment.id} {...appointment} interviewers={interviewers} bookInterview={bookInterview} />
-        })}
+        {schedule}
         <Appointment key="last" time="5pm" />
       </section>
     </main>
