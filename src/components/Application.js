@@ -67,10 +67,10 @@ export default function Application() {
     //put the new interview to API databsae, and set state.
     //make bookInterview a promise
     return axios.put(`http://localhost:8001/api/appointments/${id} `, { interview })
-      .then(()=> setState({ ...state, appointments }));
+      .then(() => setState({ ...state, appointments }));
 
   }
-
+  //delete an interview
   const cancelInterview = function(id) {
 
     const appointment = {
@@ -81,13 +81,9 @@ export default function Application() {
       ...state.appointments,
       [id]: appointment
     };
-    // console.log(appointments);
-    // setState({ ...state, appointments })
-    // console.log(state.appointments);
-    axios.put(`http://localhost:8001/api/appointments/${id}`, {"interview":appointment.interview})
-    .then(()=> setState({ ...state, appointments }));
-    // .then(()=>{})
-
+  
+    return axios.delete(`http://localhost:8001/api/appointments/${id}`)
+      .then(() => setState({ ...state, appointments }))
   }
 
   const schedule = appointments.map((appointment) => {
