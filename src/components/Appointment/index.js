@@ -14,7 +14,7 @@ const Appointment = (props) => {
   const SHOW = "SHOW";
   const CREATE = "CREATE";
   const SAVING = "SAVING";
-  const DELETE = "DELETE";
+  const DELETING = "DELETING";
   const CONFIRM = "CONFIRM";
   const EDIT = "EDIT";
   const ERROR_SAVE = "ERROR";
@@ -48,13 +48,13 @@ const Appointment = (props) => {
 
 
   const confirm = function() {
-
     transition(CONFIRM);
-
   }
+
+
   const onDelete=function() {
 
-    transition(DELETE);
+    transition(DELETING,true);
     props.cancelInterview(props.id)
       .then(() => {
         transition(EMPTY);
@@ -87,7 +87,7 @@ const Appointment = (props) => {
     )}
     {mode === CREATE && <Form interviewers={props.interviewers} save={save} onCancel={() => onCancel()} />}
     {mode === SAVING && <Status message="Saving" />}
-    {mode === DELETE && <Status message="Deleting" />}
+    {mode === DELETING && <Status message="Deleting" />}
     {mode === CONFIRM && <Confirm message="Are you sure you would like to delete?" onCancel={()=> onCancel()} onConfirm={()=>onDelete()} />}
     {mode === EDIT && <Form name={props.interview.student} interviewer={props.interview.interviewer.id} interviewers={props.interviewers} save={save} onCancel={() => back()} />}
 
