@@ -47,29 +47,21 @@ const Appointment = (props) => {
   }
 
 
-
-  const onDelete = function() {
+  const confirm = function() {
 
     transition(CONFIRM);
 
-    // transition(DELETE);
+  }
+  const onDelete=function() {
 
-    // props.cancelInterview(id)
-    // .then(() => { transition(EMPTY) })
-    // .catch(() => transition(ERROR_DELETE), true)
-
-
-    transition(DELETE, true);
-    props
-      .cancelInterview(props.id)
+    transition(DELETE);
+    props.cancelInterview(props.id)
       .then(() => {
         transition(EMPTY);
       })
       // switch to ERROR mode, and replace the last mode which is DELETE, so of we go back, we can go to CREATE(<Form />)
       .catch(() => transition(ERROR_DELETE, true));
-
   }
-
 
   //edit an interview
   const onEdit = function() {
@@ -80,6 +72,7 @@ const Appointment = (props) => {
     back();
   }
 
+
   return <article className="appointment">
     <Header time={props.time} />
 
@@ -87,16 +80,15 @@ const Appointment = (props) => {
     {mode === SHOW && (
       <Show
         student={props.interview.student}
-        interviewer={props.interview.interviewer}
-        onDelete={onDelete}
-        // appointmentId={props.id}
+        interviewer={props.interview.interviewer} 
+        onDelete={confirm}
         onEdit={onEdit}
       />
     )}
     {mode === CREATE && <Form interviewers={props.interviewers} save={save} onCancel={() => onCancel()} />}
     {mode === SAVING && <Status message="Saving" />}
     {mode === DELETE && <Status message="Deleting" />}
-    {mode === CONFIRM && <Confirm  message="Are you sure you would like to delete?" onCancel={() => back()} onConfirm={() => {}} />}
+    {mode === CONFIRM && <Confirm message="Are you sure you would like to delete?" onCancel={()=> onCancel()} onConfirm={()=>onDelete()} />}
     {mode === EDIT && <Form name={props.interview.student} interviewer={props.interview.interviewer.id} interviewers={props.interviewers} save={save} onCancel={() => back()} />}
 
     {mode === (ERROR_SAVE || ERROR_DELETE) && <Error onCancel={() => onCancel()} />}
