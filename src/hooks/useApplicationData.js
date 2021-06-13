@@ -57,7 +57,7 @@ export default function useApplicationData() {
   // const setDay = day => setState({ ...state, day });  //useState to set a day
   const setDay = day => dispatch({ type: SET_DAY, payload: { day } }); //useReduce to set a day
 
-  //define functions to set days, set appointments and set interviewers
+  //useEffect to fetch data from API and set data for rendering application
   /*   useEffect(() => {
       const setDays = days => setState(prev => ({ ...prev, days }));;
       const setAppointments = appointments => setState(prev => ({ ...prev, appointments }));;
@@ -111,13 +111,13 @@ export default function useApplicationData() {
 
   const bookInterview = function(id, interview) {
 
-    //copy appointment by id and update interview to useState
+    //copy appointment by id and update interview 
         const appointment = {
           ...state.appointments[id],
           interview: { ...interview }
         };
 
-    //copy appointments from states and update the appointment to useState
+    //copy appointments from states and update the appointment 
         const appointments = {
           ...state.appointments,
           [id]: appointment
@@ -128,7 +128,7 @@ export default function useApplicationData() {
     //put the new interview to API databsae, and set state.
     //make bookInterview a promise
     return axios.put(`http://localhost:8001/api/appointments/${id} `, { interview })
-      //use State hook to set a new interview
+      //use State to set a new interview
       /*  .then(() => setState({ ...state, appointments, days })); */
 
       //use Reducer to set a new interview
@@ -137,7 +137,7 @@ export default function useApplicationData() {
   }
 
 
-  //delete an interview
+  //delete an interview, smae logic as bookInterview
   const cancelInterview = function(id) {
 
         const appointment = {
@@ -152,7 +152,7 @@ export default function useApplicationData() {
         const days = updateSpots(id, appointments);
 
     return axios.delete(`http://localhost:8001/api/appointments/${id}`)
-      //use State hook to set an interview to null
+      //use State to set an interview to null
       /*   .then(() => setState({ ...state, appointments, days })) */
 
       //use Reducer to set an interview to null
