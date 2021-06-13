@@ -42,8 +42,6 @@ export default function useApplicationData() {
       }
     }
     copyDays[Math.floor(id / 5)].spots = count;
-    // setState({...state,copyDays})
-    // console.log("appointmnets in update spots", appointments);
 
     return copyDays;
   }
@@ -68,8 +66,7 @@ export default function useApplicationData() {
     //put the new interview to API databsae, and set state.
     //make bookInterview a promise
     return axios.put(`http://localhost:8001/api/appointments/${id} `, { interview })
-      .then(() => setState({ ...state, appointments, days }))
-    // .then(() => updateSpots(id,appointments) )
+      .then(() => setState({ ...state, appointments, days }));   
   }
 
 
