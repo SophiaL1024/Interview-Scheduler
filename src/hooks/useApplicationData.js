@@ -31,6 +31,24 @@ export default function useApplicationData() {
       })
   }, []);
 
+  const updateSpots = function(id, appointments) {
+    const copyDays = state.days.map(element => {
+      return { ...element }
+    });
+    let count = 0;
+    for (let key = (Math.floor(id / 5) + 1) * 1; key <= (Math.floor(id / 5) + 1) * 5; key++) {
+      if (!appointments[key].interview) {
+        count++;
+      }
+    }
+    copyDays[Math.floor(id / 5)].spots = count;
+    // setState({...state,copyDays})
+    // console.log("appointmnets in update spots", appointments);
+
+    return copyDays;
+  }
+
+
   const bookInterview = function(id, interview) {
 
     //copy appointment by id and update interview
@@ -44,13 +62,17 @@ export default function useApplicationData() {
       ...state.appointments,
       [id]: appointment
     };
+    //copy days from states and update the spots
+    const days = updateSpots(id, appointments);
 
     //put the new interview to API databsae, and set state.
     //make bookInterview a promise
     return axios.put(`http://localhost:8001/api/appointments/${id} `, { interview })
-      .then(() => setState({ ...state, appointments }));
-
+      .then(() => setState({ ...state, appointments, days }))
+    // .then(() => updateSpots(id,appointments) )
   }
+
+
   //delete an interview
   const cancelInterview = function(id) {
 
@@ -62,9 +84,11 @@ export default function useApplicationData() {
       ...state.appointments,
       [id]: appointment
     };
-  
+
+    const days = updateSpots(id, appointments);
+
     return axios.delete(`http://localhost:8001/api/appointments/${id}`)
-      .then(() => setState({ ...state, appointments }))
+      .then(() => setState({ ...state, appointments,days }))
   }
 
 
