@@ -1,6 +1,8 @@
 import { useState, useEffect, useReducer } from "react";
 import axios from 'axios';
 
+const REACT_APP_WEBSOCKET_URL = process.env.REACT_APP_WEBSOCKET_URL ;
+
 export default function useApplicationData() {
 
   //use Reducer to set state
@@ -75,9 +77,9 @@ export default function useApplicationData() {
         })
     }, []); */
 
-  //use Reducer to set application data
-  useEffect(() => {
-
+    useEffect(() => {
+      
+    //use Reducer to set application data
     Promise.all([
       axios.get("http://localhost:8001/api/days"),
       axios.get(" http://localhost:8001/api/appointments"),
@@ -88,8 +90,15 @@ export default function useApplicationData() {
         const appointments = all[1].data;
         const interviewers = all[2].data;
         dispatch({ type: SET_APPLICATION_DATA, payload: { days, appointments, interviewers } });
-      })
+      });
 
+      const webSocket = new WebSocket(REACT_APP_WEBSOCKET_URL);
+      webSocket.onopen = function (event) {
+        webSocket.send("ping");      
+      };
+      webSocket.onmessage = function (event) {
+        console.log(event.data);
+      }
   }, [])
 
 
