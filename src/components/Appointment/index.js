@@ -47,13 +47,9 @@ const Appointment = (props) => {
   }
 
 
-  const confirm = function() {
-    transition(CONFIRM);
-  }
 
 
   const onDelete=function() {
-
     transition(DELETING,true);
     props.cancelInterview(props.id)
       .then(() => {
@@ -63,10 +59,6 @@ const Appointment = (props) => {
       .catch(() => transition(ERROR_DELETE, true));
   }
 
-  //edit an interview
-  const onEdit = function() {
-    transition(EDIT);
-  }
 
   const onCancel = function() {
     back();
@@ -77,12 +69,12 @@ const Appointment = (props) => {
     <Header time={props.time} />
 
     {mode === EMPTY && <Empty onAdd={() => transition(CREATE)} />}
-    {mode === SHOW && (
+    {mode === SHOW &&  (
       <Show
         student={props.interview.student}
         interviewer={props.interview.interviewer} 
-        onDelete={confirm}
-        onEdit={onEdit}
+        onDelete={() => transition(CONFIRM)}
+        onEdit={() => transition(EDIT)}
       />
     )}
     {mode === CREATE && <Form interviewers={props.interviewers} save={save} onCancel={() => onCancel()} />}
