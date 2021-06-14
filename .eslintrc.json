@@ -1,4 +1,7 @@
 {
   "extends": "react-app",
-  "parser": "babel-eslint"
+  "parser": "babel-eslint",
+  "env": {
+    "jest/globals": true
+  }
 }

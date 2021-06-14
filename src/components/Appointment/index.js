@@ -77,7 +77,7 @@ const Appointment = (props) => {
         onEdit={() => transition(EDIT)}
       />
     )}
-    {mode === CREATE && <Form interviewers={props.interviewers} save={save} onCancel={() => onCancel()} />}
+    {mode === CREATE && <Form interviewers={props.interviewers} onSave={save} onCancel={() => onCancel()} />}
     {mode === SAVING && <Status message="Saving" />}
     {mode === DELETING && <Status message="Deleting" />}
     {mode === CONFIRM && <Confirm message="Are you sure you would like to delete?" onCancel={()=> onCancel()} onConfirm={()=>onDelete()} />}
