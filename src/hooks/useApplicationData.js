@@ -5,7 +5,7 @@ const REACT_APP_WEBSOCKET_URL = process.env.REACT_APP_WEBSOCKET_URL;
 
 export default function useApplicationData() {
 
-
+  //after book an interview or cancel an interview, update remaining spots
   const updateSpots = function(id, interview, currentState) {
 
     const copyDays = currentState.days.map(element => {
@@ -73,16 +73,7 @@ export default function useApplicationData() {
           `Tried to reduce with unsupported action type: ${action.type}`
         );
     }
-  }
-
-  //put all states in an object
-  /* const [state, setState] = useState({
-        day: "",
-        days: [],
-        appointments: {},
-        interviewers: {}
-    }); */
-
+  };
 
   //use Reducer
   const [state, dispatch] = useReducer(reducer, {
@@ -92,16 +83,20 @@ export default function useApplicationData() {
     interviewers: {}
   });
 
-  //after book an interview or cancel an interview, update remaining spots
+  //put all states in an object
+  /* const [state, setState] = useState({
+        day: "",
+        days: [],
+        appointments: {},
+        interviewers: {}
+    }); */
 
-
-  //define a function to set day 
   //useState to set a day
   // const setDay = day => setState({ ...state, day });  
   //useReduce to set a day
   const setDay = day => dispatch({ type: SET_DAY, payload: { day } });
 
-  //use State to set days, set appointments and set interviewers
+  //use State to set application data, when first load
   /*   useEffect(() => {
       const setDays = days => setState(prev => ({ ...prev, days }));;
       const setAppointments = appointments => setState(prev => ({ ...prev, appointments }));;
@@ -134,26 +129,20 @@ export default function useApplicationData() {
       });
   }, []);
 
-
+  //set up web socket and dispatch "set_interview" action after receiving new data from API
   useEffect(() => {
     const webSocket = new WebSocket(REACT_APP_WEBSOCKET_URL);
     webSocket.addEventListener('message', (event) => {
-      console.log("from web socket:", JSON.parse(event.data).interview);
-      bookInterviewWebSocket(event)
+      dispatch({
+        type: JSON.parse(event.data).type,
+        payload: {
+          "id": JSON.parse(event.data).id,
+          "interview": JSON.parse(event.data).interview
+        }
+      });
     });
   }, []);
 
-
-  const bookInterviewWebSocket = function(event) {
-    dispatch({
-      type: JSON.parse(event.data).type,
-      payload: {
-        "id": JSON.parse(event.data).id,
-        "interview": JSON.parse(event.data).interview,
-        // "days": updateSpots(JSON.parse(event.data).id, JSON.parse(event.data).interview)
-      }
-    });
-  }
 
   const bookInterview = function(id, interview) {
 
@@ -164,10 +153,9 @@ export default function useApplicationData() {
       /*  .then(() => setState({ ...state, appointments, days })); */
 
       //use Reducer to set a new interview
-      .then(() => { 
+      .then(() => {
         dispatch({ type: SET_INTERVIEW, payload: { id, interview, "days": updateSpots(id, interview, state) } })
-      }
-      );
+      });
   }
 
 
