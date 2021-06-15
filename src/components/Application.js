@@ -19,13 +19,14 @@ export default function Application() {
 
   //interviewers displayed in the form
   const interviewers = getInterviewersForDay(state, state.day)
+console.log("state.appointments",state.appointments);
 
   //appointments displayed in the Appointment component
   const appointments = getAppointmentsForDay(state, state.day).map((appointment) => {  
 
     return (
       <Appointment
-        key={appointment.id}
+        key={Date.now()+appointment.id}
         id={appointment.id}
         time={appointment.time}
         interview={getInterview(state, appointment.interview)}
