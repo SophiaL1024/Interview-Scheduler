@@ -18,15 +18,14 @@ export default function Application() {
   } = useApplicationData();
 
   //interviewers displayed in the form
-  const interviewers = getInterviewersForDay(state, state.day)
-console.log("state.appointments",state.appointments);
+  const interviewers = getInterviewersForDay(state, state.day);
 
   //appointments displayed in the Appointment component
   const appointments = getAppointmentsForDay(state, state.day).map((appointment) => {  
 
     return (
       <Appointment
-        key={Date.now()+appointment.id}
+        key={appointment.id}
         id={appointment.id}
         time={appointment.time}
         interview={getInterview(state, appointment.interview)}
@@ -36,6 +35,7 @@ console.log("state.appointments",state.appointments);
       />
     );
   });
+
 
   return (
     <main className="layout">

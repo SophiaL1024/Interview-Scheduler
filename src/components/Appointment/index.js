@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import "./index.scss"
 import Header from "./Header"
 import Show from "./Show"
@@ -44,13 +44,10 @@ const Appointment = (props) => {
       .catch(() => {
         transition(ERROR_SAVE, true);
       })
-  }
+  };
 
-
-
-
-  const onDelete=function() {
-    transition(DELETING,true);
+  const onDelete = function() {
+    transition(DELETING, true);
     props.cancelInterview(props.id)
       .then(() => {
         transition(EMPTY);
@@ -62,17 +59,27 @@ const Appointment = (props) => {
 
   const onCancel = function() {
     back();
-  }
+  };
+
+  //conditionally switch mode after the client receiving data from webSocket to fix the stale state bug.
+  useEffect(() => {
+    if (props.interview && mode === EMPTY) {
+      transition(SHOW);
+    }
+    if (props.interview === null && mode === SHOW) {
+      transition(EMPTY);
+    }
+  }, [props.interview, transition, mode]);
 
 
   return <article className="appointment">
     <Header time={props.time} />
 
     {mode === EMPTY && <Empty onAdd={() => transition(CREATE)} />}
-    {mode === SHOW &&  (
+    {mode === SHOW && props.interview && (
       <Show
         student={props.interview.student}
-        interviewer={props.interview.interviewer} 
+        interviewer={props.interview.interviewer}
         onDelete={() => transition(CONFIRM)}
         onEdit={() => transition(EDIT)}
       />
@@ -80,7 +87,7 @@ const Appointment = (props) => {
     {mode === CREATE && <Form interviewers={props.interviewers} onSave={save} onCancel={() => onCancel()} />}
     {mode === SAVING && <Status message="Saving" />}
     {mode === DELETING && <Status message="Deleting" />}
-    {mode === CONFIRM && <Confirm message="Are you sure you would like to delete?" onCancel={()=> onCancel()} onConfirm={()=>onDelete()} />}
+    {mode === CONFIRM && <Confirm message="Are you sure you would like to delete?" onCancel={() => onCancel()} onConfirm={() => onDelete()} />}
     {mode === EDIT && <Form name={props.interview.student} interviewer={props.interview.interviewer.id} interviewers={props.interviewers} save={save} onCancel={() => back()} />}
 
     {mode === (ERROR_SAVE || ERROR_DELETE) && <Error onCancel={() => onCancel()} />}

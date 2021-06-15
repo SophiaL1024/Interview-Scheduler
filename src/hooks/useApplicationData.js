@@ -29,7 +29,6 @@ export default function useApplicationData() {
     const end = (id % 5) ? Math.floor(id / 5) * 5 + 5 : id;
 
     for (let key = start; key <= end; key++) {
-
       if (!appointments[key].interview) {
         count++;
       }
@@ -65,8 +64,6 @@ export default function useApplicationData() {
           ...state.appointments,
           [action.payload.id]: appointment
         };
-        console.log("appointments: ", appointments);
-        console.log("action.payload:", action.payload);
 
         return { ...state, appointments, "days": updateSpots(action.payload.id, action.payload.interview, state) }
       }
@@ -135,20 +132,16 @@ export default function useApplicationData() {
         const interviewers = all[2].data;
         dispatch({ type: SET_APPLICATION_DATA, payload: { days, appointments, interviewers } });
       });
-  }, [])
+  }, []);
 
 
   useEffect(() => {
-
-
     const webSocket = new WebSocket(REACT_APP_WEBSOCKET_URL);
-
     webSocket.addEventListener('message', (event) => {
       console.log("from web socket:", JSON.parse(event.data).interview);
       bookInterviewWebSocket(event)
     });
-
-  }, [])
+  }, []);
 
 
   const bookInterviewWebSocket = function(event) {
@@ -171,8 +164,7 @@ export default function useApplicationData() {
       /*  .then(() => setState({ ...state, appointments, days })); */
 
       //use Reducer to set a new interview
-      .then(() => {
-        console.log("inside book interview");
+      .then(() => { 
         dispatch({ type: SET_INTERVIEW, payload: { id, interview, "days": updateSpots(id, interview, state) } })
       }
       );
@@ -187,8 +179,7 @@ export default function useApplicationData() {
       /*   .then(() => setState({ ...state, appointments, days })) */
 
       //use Reducer to set an interview to null
-      .then(() => dispatch({ type: SET_INTERVIEW, payload: { id, interview: null, "days": updateSpots(id, null, state) } }))
-
+      .then(() => dispatch({ type: SET_INTERVIEW, payload: { id, interview: null, "days": updateSpots(id, null, state) } }));
   }
 
 
