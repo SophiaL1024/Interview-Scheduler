@@ -1,44 +1,32 @@
 import { useState, useEffect, useReducer } from "react";
 import axios from 'axios';
-axios.defaults.baseURL = "http://localhost:8001"; 
+axios.defaults.baseURL = "http://localhost:8001";
 
 const REACT_APP_WEBSOCKET_URL = process.env.REACT_APP_WEBSOCKET_URL;
 
 export default function useApplicationData() {
 
   //after book an interview or cancel an interview, update remaining spots
-  const updateSpots = function(id, interview, currentState) {
-
-    const copyDays = currentState.days.map(element => {
-      return { ...element }
-    });
-    //copy appointment by id and update interview 
-    const appointment = {
-      ...currentState.appointments[id],
-      interview: interview ? { ...interview } : null
-    };
-
-    //copy appointments from cunrrentStates and update the appointment 
-    const appointments = {
-      ...currentState.appointments,
-      [id]: appointment
-    };
-
-    //count interviews which is null
+  const getSpotsForDay = function(day, appointments) {
     let count = 0;
-    const start = (id % 5) ? Math.floor(id / 5) * 5 + 1 : id - 4;
-    const end = (id % 5) ? Math.floor(id / 5) * 5 + 5 : id;
 
-    for (let key = start; key <= end; key++) {
-      if (!appointments[key].interview) {
+    day.appointments.forEach((appointmentId) => {
+      if (!appointments[appointmentId].interview) {
         count++;
       }
-    }
+    });
+    return count;
+  };
 
-    //update remaining spots
-    copyDays[(id % 5) ? Math.floor(id / 5) : (id / 5 - 1)].spots = count;
 
-    return copyDays;
+  const updateSpots = function(dayName, days, appointments) {
+
+    const dayObj = days.find(day => day.name === dayName);
+    const spots = getSpotsForDay(dayObj, appointments);
+    const newDay = { ...dayObj };
+    newDay.spots = spots;
+    const newDays = days.map(day => day.name === dayName ? newDay : day);
+    return newDays;
   };
 
   //use Reducer to set state
@@ -65,8 +53,22 @@ export default function useApplicationData() {
           ...state.appointments,
           [action.payload.id]: appointment
         };
+        //update new state for update spots function use
+        const newState = { ...state, appointments };
 
-        return { ...state, appointments, "days": updateSpots(action.payload.id, action.payload.interview, state) }
+        //find the changed day's name
+        let dayName = ""
+        newState.days.forEach(day => {
+          day.appointments.forEach(appointmentId => {
+            if (appointmentId === action.payload.id) {
+              dayName = day.name;
+            }
+          })
+        });
+        //update spots and return new days obj
+        const days = updateSpots(dayName, newState.days, appointments)
+
+        return { ...newState, days }
       }
 
       default:
@@ -122,7 +124,7 @@ export default function useApplicationData() {
       axios.get("/api/appointments"),
       axios.get("/api/interviewers")
     ])
-      .then((all) => { 
+      .then((all) => {
         const days = all[0].data;
         const appointments = all[1].data;
         const interviewers = all[2].data;
@@ -155,7 +157,7 @@ export default function useApplicationData() {
 
       //use Reducer to set a new interview
       .then(() => {
-        dispatch({ type: SET_INTERVIEW, payload: { id, interview, "days": updateSpots(id, interview, state) } })
+        dispatch({ type: SET_INTERVIEW, payload: { id, interview } })
       });
   }
 
@@ -168,7 +170,7 @@ export default function useApplicationData() {
       /*   .then(() => setState({ ...state, appointments, days })) */
 
       //use Reducer to set an interview to null
-      .then(() => dispatch({ type: SET_INTERVIEW, payload: { id, interview: null, "days": updateSpots(id, null, state) } }));
+      .then(() => dispatch({ type: SET_INTERVIEW, payload: { id, interview: null } }));
   }
 
 

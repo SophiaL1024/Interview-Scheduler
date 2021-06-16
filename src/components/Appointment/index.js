@@ -17,8 +17,8 @@ const Appointment = (props) => {
   const DELETING = "DELETING";
   const CONFIRM = "CONFIRM";
   const EDIT = "EDIT";
-  const ERROR_SAVE = "ERROR";
-  const ERROR_DELETE = "ERROR";
+  const ERROR = "ERROR";
+  // const ERROR_DELETE = "ERROR";
 
 
   //according to if there is an interview, switch mode between Empty and Show
@@ -42,7 +42,7 @@ const Appointment = (props) => {
       .then(() => transition(SHOW))
       // switch to ERROR mode, and replace the last mode which is SAVING, so when we go back, we will go to CREATE(<Form />)
       .catch(() => {
-        transition(ERROR_SAVE, true);
+        transition(ERROR, true);
       })
   };
 
@@ -53,7 +53,7 @@ const Appointment = (props) => {
         transition(EMPTY);
       })
       // switch to ERROR mode, and replace the last mode which is DELETE, so of we go back, we can go to CREATE(<Form />)
-      .catch(() => transition(ERROR_DELETE, true));
+      .catch(() => transition(ERROR, true));
   }
 
 
@@ -90,7 +90,7 @@ const Appointment = (props) => {
     {mode === CONFIRM && <Confirm message="Are you sure you would like to delete?" onCancel={() => onCancel()} onConfirm={() => onDelete()} />}
     {mode === EDIT && <Form name={props.interview.student} interviewer={props.interview.interviewer.id} interviewers={props.interviewers} onSave={save} onCancel={() => back()} />}
 
-    {mode === (ERROR_SAVE || ERROR_DELETE) && <Error onCancel={() => onCancel()} />}
+    {mode === ERROR && <Error onCancel={() => onCancel()} />}
   </article>;
 }
 
