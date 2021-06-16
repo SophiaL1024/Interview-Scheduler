@@ -10,12 +10,11 @@ export default function useVisualMode(initial) {
 
     if (replace) {
       setHistory(prev => [...prev.slice(0, prev.length - 1), newMode]);
-    }
-    else {
+    } else {
       setHistory(prev => [...prev, newMode]);
     }
-    // console.log(history);  
-  }
+    // console.log(history);
+  };
 
   const back = function() {
     if (history.length >= 2) {
@@ -28,13 +27,13 @@ export default function useVisualMode(initial) {
 
         //define a templete const to store prev.slice(0, prev.length - 1)
         //because setState is async, so we need this templete to set mode, before set history
-        const historyBack = prev.slice(0, prev.length - 1)
+        const historyBack = prev.slice(0, prev.length - 1);
 
-        setMode(historyBack[historyBack.length - 1])
+        setMode(historyBack[historyBack.length - 1]);
 
         return historyBack;
 
-      })
+      });
       // console.log("prev:",prev);
       // console.log("slice",[...prev.slice(0, prev.length-1)]);
       // return [...prev.slice(0, prev.length-1)];
@@ -43,6 +42,6 @@ export default function useVisualMode(initial) {
       // console.log("after set history:", history);
 
     }
-  }
-  return { mode, transition, back, history }
+  };
+  return { mode, transition, back, history };
 }

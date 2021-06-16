@@ -4,13 +4,11 @@ import {
   render,
   cleanup,
   waitForElement,
-  prettyDOM,
   fireEvent,
   getByText,
   getAllByTestId,
   getByAltText,
   getByPlaceholderText,
-  waitForElementToBeRemoved,
   queryByText,
   queryByAltText
 } from "@testing-library/react";
@@ -20,7 +18,7 @@ import Application from "components/Application";
 afterEach(cleanup);
 
 describe("Application", () => {
-  it("changes the schedule when a new day is selected", async () => {
+  it("changes the schedule when a new day is selected", async() => {
     const { getByText } = render(<Application />);
 
     await waitForElement(() => getByText("Monday"));
@@ -28,13 +26,13 @@ describe("Application", () => {
     fireEvent.click(getByText("Tuesday"));
 
     expect(getByText("Leopold Silvers")).toBeInTheDocument();
-  })
+  });
 
 
 
 
-  it("loads data, books an interview and reduces the spots remaining for Monday by 1", async () => {
-    const { container, debug } = render(<Application />);
+  it("loads data, books an interview and reduces the spots remaining for Monday by 1", async() => {
+    const { container } = render(<Application />);
 
     await waitForElement(() => getByText(container, "Archie Cohen"));
 
@@ -64,9 +62,9 @@ describe("Application", () => {
 
 
 
-  it("loads data, cancels an interview and increases the spots remaining for Monday by 1", async () => {
+  it("loads data, cancels an interview and increases the spots remaining for Monday by 1", async() => {
     // 1. Render the Application.
-    const { container, debug } = render(<Application />);
+    const { container } = render(<Application />);
 
     // 2. Wait until the text "Archie Cohen" is displayed.
     await waitForElement(() => getByText(container, "Archie Cohen"));
@@ -96,16 +94,16 @@ describe("Application", () => {
       queryByText(day, 'Monday')
     );
   
-    expect(getByText(day, '2 spots remaining')).toBeInTheDocument(); 
+    expect(getByText(day, '2 spots remaining')).toBeInTheDocument();
 
   });
 
 
 
 
-  it("loads data, edits an interview and keeps the spots remaining for Monday the same", async () => {
+  it("loads data, edits an interview and keeps the spots remaining for Monday the same", async() => {
     // 1. Render the Application.
-    const { container, debug } = render(<Application />);
+    const { container } = render(<Application />);
     // 2. Wait until the text "Archie Cohen" is displayed.
     await waitForElement(() => getByText(container, "Archie Cohen"));
     //3.Click edit icon
@@ -127,17 +125,17 @@ describe("Application", () => {
       queryByText(day, "Monday"));
     expect(getByText(day, "1 spot remaining")).toBeInTheDocument();
 
-  })
+  });
 
 
 
 
-  it("shows the save error when failing to save an appointment", async () => {
+  it("shows the save error when failing to save an appointment", async() => {
     //1. mock error message from axios.put
     axios.put.mockRejectedValueOnce();
     //2. Render the Application.
-    const { container, debug } = render(<Application />);
-    //3.find the first 
+    const { container } = render(<Application />);
+    //3.find the first
     await waitForElement(() => getByText(container, 'Archie Cohen'));
     const appointments = getAllByTestId(container, 'appointment');
     const appointment = appointments[0];
@@ -169,11 +167,11 @@ describe("Application", () => {
 
 
 
-  it("shows the delete error when failing to delete an existing appointment", async () => {
+  it("shows the delete error when failing to delete an existing appointment", async() => {
     //1. mock error connection from axios.put
     axios.delete.mockRejectedValueOnce();
-    //2. Render the Application.   
-    const { container, debug } = render(<Application />);
+    //2. Render the Application.
+    const { container } = render(<Application />);
 
     // 3. Wait until the text "Archie Cohen" is displayed.
     await waitForElement(() => getByText(container, "Archie Cohen"));
@@ -194,7 +192,7 @@ describe("Application", () => {
     // 7. Check that the element with the text "Deleting" is displayed.
     expect(getByText(appointment, 'Deleting')).toBeInTheDocument();
    
-    //8.check Error is displayed    
+    //8.check Error is displayed
     await waitForElement(() => getByText(appointment, 'Error'));
     expect(getByText(appointment, 'Error')).toBeInTheDocument();
 
@@ -206,6 +204,6 @@ describe("Application", () => {
       queryByText(day, 'Monday')
     );
     expect(getByText(day, '1 spot remaining')).toBeInTheDocument();
-  })
-})
+  });
+});
 

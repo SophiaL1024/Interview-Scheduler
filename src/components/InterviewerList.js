@@ -6,7 +6,7 @@ import InterviewerListItem from "components/InterviewerListItem";
 
 const InterviewerList = (props) => {
  
-   const interviewers = props.interviewers.map(interviewer => { 
+  const interviewers = props.interviewers.map(interviewer => {
     return (
       <InterviewerListItem
         key={interviewer.id}
@@ -16,7 +16,7 @@ const InterviewerList = (props) => {
         setInterviewer={event => props.onChange(interviewer.id)}
       />
     );
-  });  
+  });
  
   return (
     <section className="interviewers">
@@ -25,7 +25,7 @@ const InterviewerList = (props) => {
         {interviewers}
       </ul>
     </section>
-  )
+  );
 };
 //validate type of interviewers is array.
 InterviewerList.propTypes = {

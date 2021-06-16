@@ -34,47 +34,47 @@ export default function useApplicationData() {
   const SET_APPLICATION_DATA = "SET_APPLICATION_DATA";
   const SET_INTERVIEW = "SET_INTERVIEW";
 
-  function reducer(state, action) {
+  const reducer = function(state, action) {
     switch (action.type) {
-      case SET_DAY:
-        return { ...state, "day": action.payload.day }
-      case SET_APPLICATION_DATA:
-        return { ...state, "days": action.payload.days, "appointments": action.payload.appointments, "interviewers": action.payload.interviewers }
-      case SET_INTERVIEW: {
+    case SET_DAY:
+      return { ...state, "day": action.payload.day };
+    case SET_APPLICATION_DATA:
+      return { ...state, "days": action.payload.days, "appointments": action.payload.appointments, "interviewers": action.payload.interviewers };
+    case SET_INTERVIEW: {
 
-        //copy appointment by id and update interview
-        const appointment = {
-          ...state.appointments[action.payload.id],
-          interview: action.payload.interview ? { ...action.payload.interview } : null
-        };
+      //copy appointment by id and update interview
+      const appointment = {
+        ...state.appointments[action.payload.id],
+        interview: action.payload.interview ? { ...action.payload.interview } : null
+      };
 
-        //copy appointments from states and update the appointment
-        const appointments = {
-          ...state.appointments,
-          [action.payload.id]: appointment
-        };
+      //copy appointments from states and update the appointment
+      const appointments = {
+        ...state.appointments,
+        [action.payload.id]: appointment
+      };
         //update new state for update spots function use
-        const newState = { ...state, appointments };
+      const newState = { ...state, appointments };
 
-        //find the changed day's name
-        let dayName = ""
-        newState.days.forEach(day => {
-          day.appointments.forEach(appointmentId => {
-            if (appointmentId === action.payload.id) {
-              dayName = day.name;
-            }
-          })
+      //find the changed day's name
+      let dayName = "";
+      newState.days.forEach(day => {
+        day.appointments.forEach(appointmentId => {
+          if (appointmentId === action.payload.id) {
+            dayName = day.name;
+          }
         });
-        //update spots and return new days obj
-        const days = updateSpots(dayName, newState.days, appointments)
+      });
+      //update spots and return new days obj
+      const days = updateSpots(dayName, newState.days, appointments);
 
-        return { ...newState, days }
-      }
+      return { ...newState, days };
+    }
 
-      default:
-        throw new Error(
-          `Tried to reduce with unsupported action type: ${action.type}`
-        );
+    default:
+      throw new Error(
+        `Tried to reduce with unsupported action type: ${action.type}`
+      );
     }
   };
 
@@ -95,7 +95,7 @@ export default function useApplicationData() {
     }); */
 
   //useState to set a day
-  // const setDay = day => setState({ ...state, day });  
+  // const setDay = day => setState({ ...state, day });
   //useReduce to set a day
   const setDay = day => dispatch({ type: SET_DAY, payload: { day } });
 
@@ -152,26 +152,26 @@ export default function useApplicationData() {
     //put the new interview to API databsae, and set state.
     //make bookInterview a promise
     return axios.put(`/api/appointments/${id} `, { interview })
-      //use State hook to set a new interview
-      /*  .then(() => setState({ ...state, appointments, days })); */
+    //use State hook to set a new interview
+    /*  .then(() => setState({ ...state, appointments, days })); */
 
       //use Reducer to set a new interview
       .then(() => {
-        dispatch({ type: SET_INTERVIEW, payload: { id, interview } })
+        dispatch({ type: SET_INTERVIEW, payload: { id, interview } });
       });
-  }
+  };
 
 
   //delete an interview
   const cancelInterview = function(id) {
 
     return axios.delete(`/api/appointments/${id}`)
-      //use State hook to set an interview to null
-      /*   .then(() => setState({ ...state, appointments, days })) */
+    //use State hook to set an interview to null
+    /*   .then(() => setState({ ...state, appointments, days })) */
 
       //use Reducer to set an interview to null
       .then(() => dispatch({ type: SET_INTERVIEW, payload: { id, interview: null } }));
-  }
+  };
 
 
   return { state, setDay, bookInterview, cancelInterview };

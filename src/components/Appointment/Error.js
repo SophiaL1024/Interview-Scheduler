@@ -1,4 +1,4 @@
-import React from "react"
+import React from "react";
 const Error = (props) => {
   return (
     <main className="appointment__card appointment__card--error">
@@ -13,6 +13,6 @@ const Error = (props) => {
         onClick={()=>props.onCancel()}
       />
     </main>
-  )
-}
+  );
+};
 export default Error;

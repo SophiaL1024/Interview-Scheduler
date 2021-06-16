@@ -1,13 +1,13 @@
 import React, { useEffect } from "react";
-import "./index.scss"
-import Header from "./Header"
-import Show from "./Show"
-import Empty from "./Empty"
-import Form from "./Form"
-import Status from "./Status"
+import "./index.scss";
+import Header from "./Header";
+import Show from "./Show";
+import Empty from "./Empty";
+import Form from "./Form";
+import Status from "./Status";
 import Confirm from "./Confirm";
 import Error from "./Error";
-import useVisualMode from "../../hooks/useVisualMode"
+import useVisualMode from "../../hooks/useVisualMode";
 
 const Appointment = (props) => {
   const EMPTY = "EMPTY";
@@ -33,7 +33,7 @@ const Appointment = (props) => {
       interviewer
     };
 
-    //show saving status while updating in progress    
+    //show saving status while updating in progress
     transition(SAVING);
 
     // after save the new interview, transite to SHOW mode
@@ -43,7 +43,7 @@ const Appointment = (props) => {
       // switch to ERROR mode, and replace the last mode which is SAVING, so when we go back, we will go to CREATE(<Form />)
       .catch(() => {
         transition(ERROR, true);
-      })
+      });
   };
 
   const onDelete = function() {
@@ -54,7 +54,7 @@ const Appointment = (props) => {
       })
       // switch to ERROR mode, and replace the last mode which is DELETE, so of we go back, we can go to CREATE(<Form />)
       .catch(() => transition(ERROR, true));
-  }
+  };
 
 
   const onCancel = function() {
@@ -92,7 +92,7 @@ const Appointment = (props) => {
 
     {mode === ERROR && <Error onCancel={() => onCancel()} />}
   </article>;
-}
+};
 
 export default Appointment;
 
