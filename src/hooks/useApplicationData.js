@@ -78,7 +78,7 @@ export default function useApplicationData() {
 
   //use Reducer
   const [state, dispatch] = useReducer(reducer, {
-    day: "",
+    day: "Monday",
     days: [],
     appointments: {},
     interviewers: {}
