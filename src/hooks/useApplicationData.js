@@ -1,5 +1,6 @@
 import { useState, useEffect, useReducer } from "react";
 import axios from 'axios';
+axios.defaults.baseURL = "http://localhost:8001"; 
 
 const REACT_APP_WEBSOCKET_URL = process.env.REACT_APP_WEBSOCKET_URL;
 
@@ -117,11 +118,11 @@ export default function useApplicationData() {
   //use Reducer to set application data, when first load
   useEffect(() => {
     Promise.all([
-      axios.get("http://localhost:8001/api/days"),
-      axios.get(" http://localhost:8001/api/appointments"),
-      axios.get(" http://localhost:8001/api/interviewers")
+      axios.get("/api/days"),
+      axios.get("/api/appointments"),
+      axios.get("/api/interviewers")
     ])
-      .then((all) => {
+      .then((all) => { 
         const days = all[0].data;
         const appointments = all[1].data;
         const interviewers = all[2].data;
@@ -148,7 +149,7 @@ export default function useApplicationData() {
 
     //put the new interview to API databsae, and set state.
     //make bookInterview a promise
-    return axios.put(`http://localhost:8001/api/appointments/${id} `, { interview })
+    return axios.put(`/api/appointments/${id} `, { interview })
       //use State hook to set a new interview
       /*  .then(() => setState({ ...state, appointments, days })); */
 
@@ -162,7 +163,7 @@ export default function useApplicationData() {
   //delete an interview
   const cancelInterview = function(id) {
 
-    return axios.delete(`http://localhost:8001/api/appointments/${id}`)
+    return axios.delete(`/api/appointments/${id}`)
       //use State hook to set an interview to null
       /*   .then(() => setState({ ...state, appointments, days })) */
 
