@@ -19,7 +19,7 @@ It can:
 1. Clone this repository.
 2. Install dependencies using the `npm install` command.
 3. Start the web server using the `npm start` command.
-4. Clone the scheduler-api repository.[link to scheduler-api](https://github.com/SophiaL1024/scheduler-api).
+4. Clone the scheduler-api repository. [Click here to link to scheduler-api](https://github.com/SophiaL1024/scheduler-api).
 5. Follow its README.md to set up the api.
 6. Go to http://localhost:8000/ in your browser.
 
@@ -41,4 +41,9 @@ npm test
 npm run storybook
 ```
  ## Screenshots
- 
+!["Screenshots of Interview-Scheduler"](https://github.com/SophiaL1024/Interview-Scheduler/blob/master/doc/Create_Interview.png?raw=true)
+
+!["Screenshots of Interview-Scheduler"](https://github.com/SophiaL1024/Interview-Scheduler/blob/master/doc/Show_Interview.png?raw=true)
+
+!["Screenshots of Interview-Scheduler"](https://github.com/SophiaL1024/Interview-Scheduler/blob/master/doc/Delete_Appointment.png?raw=true)
+
