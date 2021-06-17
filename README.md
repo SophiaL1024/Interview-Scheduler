@@ -41,9 +41,10 @@ npm test
 npm run storybook
 ```
  ## Screenshots
+ *** Create an interview
 !["Screenshots of Interview-Scheduler"](https://github.com/SophiaL1024/Interview-Scheduler/blob/master/doc/Create_Interview.png?raw=true)
-
+ *** Show interviews
 !["Screenshots of Interview-Scheduler"](https://github.com/SophiaL1024/Interview-Scheduler/blob/master/doc/Show_Interview.png?raw=true)
-
+ *** Delete an interview
 !["Screenshots of Interview-Scheduler"](https://github.com/SophiaL1024/Interview-Scheduler/blob/master/doc/Delete_Appointment.png?raw=true)
 
