@@ -57,10 +57,6 @@ const Appointment = (props) => {
   };
 
 
-  const onCancel = function() {
-    back();
-  };
-
   //conditionally switch mode after the client receiving data from webSocket to fix the stale state bug.
   useEffect(() => {
     if (props.interview && mode === EMPTY) {
@@ -84,13 +80,13 @@ const Appointment = (props) => {
         onEdit={() => transition(EDIT)}
       />
     )}
-    {mode === CREATE && <Form interviewers={props.interviewers} onSave={save} onCancel={() => onCancel()} />}
+    {mode === CREATE && <Form interviewers={props.interviewers} onSave={save} onCancel={back} />}
     {mode === SAVING && <Status message="Saving" />}
     {mode === DELETING && <Status message="Deleting" />}
-    {mode === CONFIRM && <Confirm message="Are you sure you would like to delete?" onCancel={() => onCancel()} onConfirm={() => onDelete()} />}
-    {mode === EDIT && <Form name={props.interview.student} interviewer={props.interview.interviewer.id} interviewers={props.interviewers} onSave={save} onCancel={() => back()} />}
+    {mode === CONFIRM && <Confirm message="Are you sure you would like to delete?" onCancel={back} onConfirm={() => onDelete()} />}
+    {mode === EDIT && <Form name={props.interview.student} interviewer={props.interview.interviewer.id} interviewers={props.interviewers} onSave={save} onCancel={ back} />}
 
-    {mode === ERROR && <Error onCancel={() => onCancel()} />}
+    {mode === ERROR && <Error onCancel={back} />}
   </article>;
 };
 

@@ -40,6 +40,15 @@ npm test
 ```sh
 npm run storybook
 ```
+
+## Dependencies
+- axios: ^0.21.1
+- classnames: ^2.2.6,
+- normalize.css: ^8.0.1,
+- react: ^16.9.0,
+- react-dom: ^16.9.0,
+- react-scripts: 3.0.0
+
  ## Screenshots
  *** Create an interview
 !["Screenshots of Interview-Scheduler"](https://github.com/SophiaL1024/Interview-Scheduler/blob/master/doc/Create_Interview.png?raw=true)
