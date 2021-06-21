@@ -12,8 +12,6 @@ axios.defaults.baseURL = "http://localhost:8001";
 const REACT_APP_WEBSOCKET_URL = process.env.REACT_APP_WEBSOCKET_URL;
 
 export default function useApplicationData() {
-
-  //use Reducer
   const [state, dispatch] = useReducer(reducer, {
     day: "Monday",
     days: [],
