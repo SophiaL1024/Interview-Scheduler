@@ -71,8 +71,9 @@ const reducer = function(state, action) {
   }
 };
 
+
+export default reducer;
 export {
-  reducer,
   SET_DAY,
   SET_APPLICATION_DATA,
   SET_INTERVIEW

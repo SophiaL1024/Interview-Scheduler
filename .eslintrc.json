@@ -5,7 +5,8 @@
     "commonjs": true,
     "es6": true,
     "node": true,
-    "mocha": true
+    "mocha": true,
+    "cypress":true
   },
   "extends": ["react-app", "eslint:recommended"],
   "globals": {

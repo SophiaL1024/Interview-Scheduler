@@ -1,11 +1,10 @@
 import {  useEffect, useReducer } from "react";
 import axios from 'axios';
-import {
-  reducer,
+import reducer,{
   SET_DAY,
   SET_APPLICATION_DATA,
   SET_INTERVIEW
-} from "reducers/reducer";
+} from "reducers/application";
 
 axios.defaults.baseURL = "http://localhost:8001";
 
